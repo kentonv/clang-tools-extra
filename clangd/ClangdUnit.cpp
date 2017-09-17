@@ -163,6 +163,15 @@ std::unique_ptr<CompilerInvocation>
 createCompilerInvocation(ArrayRef<const char *> ArgList,
                          IntrusiveRefCntPtr<DiagnosticsEngine> Diags,
                          IntrusiveRefCntPtr<vfs::FileSystem> VFS) {
+  // Log the command line.
+  std::string msg = "$$$ ";
+  for (auto& arg: ArgList) {
+    msg += arg;
+    msg.push_back(' ');
+  }
+  msg.push_back(' ');
+  llvm::errs() << msg;
+
   auto CI = createInvocationFromCommandLine(ArgList, std::move(Diags),
                                             std::move(VFS));
   // We rely on CompilerInstance to manage the resource (i.e. free them on
