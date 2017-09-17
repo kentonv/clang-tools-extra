@@ -767,7 +767,7 @@ SourceLocation getBeginningOfIdentifier(ParsedAST &Unit, const Position &Pos,
   const SourceManager &SourceMgr = AST.getSourceManager();
 
   SourceLocation InputLocation =
-      getMacroArgExpandedLocation(SourceMgr, FE, Pos);
+      SourceMgr.translateFileLineCol(FE, Pos.line + 1, Pos.character + 1);
   if (Pos.character == 0) {
     return InputLocation;
   }
@@ -780,8 +780,8 @@ SourceLocation getBeginningOfIdentifier(ParsedAST &Unit, const Position &Pos,
   // token. If so, Take the beginning of this token.
   // (It should be the same identifier because you can't have two adjacent
   // identifiers without another token in between.)
-  SourceLocation PeekBeforeLocation = getMacroArgExpandedLocation(
-      SourceMgr, FE, Position{Pos.line, Pos.character - 1});
+  SourceLocation PeekBeforeLocation = SourceMgr.translateFileLineCol(
+    FE, Pos.line + 1, Pos.character);
   Token Result;
   if (Lexer::getRawToken(PeekBeforeLocation, Result, SourceMgr,
                          AST.getLangOpts(), false)) {
