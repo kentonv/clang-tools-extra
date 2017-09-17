@@ -30,7 +30,7 @@ static void addExtraFlags(tooling::CompileCommand &Command,
 }
 
 tooling::CompileCommand getDefaultCompileCommand(PathRef File) {
-  std::vector<std::string> CommandLine{"clang", "-fsyntax-only", File.str()};
+  std::vector<std::string> CommandLine{"clang", "-fsyntax-only", "-xc++", "-std=c++17", "-I/home/kenton/src/all/src", "-I/home/kenton/src/all/tmp", File.str()};
   return tooling::CompileCommand(llvm::sys::path::parent_path(File),
                                  llvm::sys::path::filename(File), CommandLine,
                                  /*Output=*/"");
